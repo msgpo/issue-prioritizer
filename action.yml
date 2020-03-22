@@ -1,0 +1,18 @@
+name: 'Issue Prioritizer'
+description: 'Prioritizes issues in a specified column.'
+inputs:
+  token:
+    description: |
+      Token to authenticate the request
+    required: true
+  column_id:
+    description: |
+      column_id parameter
+    required: true
+  order:
+    description: |
+      The right order of labels separated with commas (for example, `priority:critical,priority:high,priority:low`)
+    required: true
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
