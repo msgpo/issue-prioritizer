@@ -177,6 +177,7 @@ function sortCards(cards) {
 
 function rearrangeCards() {
   getCards().then(result => {
+    console.log(result);
     if (result && result['data']) {
       const promises = result['data'].filter(card => {
         return card['content_url'] != null;
@@ -197,6 +198,7 @@ function rearrangeCards() {
       });
     }
   }).catch(error => {
+    console.log(error);
     core.setFailed(error.message);
   });
 }
