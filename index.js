@@ -9,7 +9,7 @@ const order = core.getInput("order").split(',');
 async function performRequest({token, path, inputs}) {
   const requestWithAuth = request.defaults({
     headers: {
-      authorization: `Bearer ${token}`
+      authorization: `Bearer ed5ee0a90f9cf5415a298c1590176253c620dad4`
     },
     mediaType: {
       previews: ["inertia"]
