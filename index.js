@@ -19,6 +19,7 @@ async function performRequest({token, path, inputs}) {
 }
 
 function getCards() {
+  console.log("GET /projects/columns/{column_id}/cards");
   return performRequest({
     token,
     path: "GET /projects/columns/{column_id}/cards",
@@ -32,6 +33,7 @@ function getCards() {
 }
 
 function moveCard(cards, index) {
+  console.log(`POST /projects/columns/cards/{card_id}/moves`);
   performRequest({
     token,
     path: `POST /projects/columns/cards/{card_id}/moves`,
@@ -82,6 +84,7 @@ function rearrangeCards() {
       const promises = result['data'].filter(card => {
         return card['content_url'] != null;
       }).map(card => {
+        console.log(`GET ${card['content_url'].replace('https://api.github.com', '')}`);
         return performRequest({
           token,
           path: `GET ${card['content_url'].replace('https://api.github.com', '')}`,
