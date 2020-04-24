@@ -78,7 +78,6 @@ function sortCards(cards) {
 
 function rearrangeCards() {
   getCards().then(result => {
-    console.log(result);
     if (result && result['data']) {
       const promises = result['data'].filter(card => {
         return card['content_url'] != null;
@@ -89,6 +88,8 @@ function rearrangeCards() {
         }).then(issue => {
           card.labels = issue['data']['labels'].map(label => label.name);
           return card;
+        }).catch(error => {
+          console.log(error);
         });
       });
 
