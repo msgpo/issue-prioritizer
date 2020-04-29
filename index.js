@@ -6,6 +6,8 @@ const { paginateRest } = require("@octokit/plugin-paginate-rest");
 const token = core.getInput("token");
 const column_id = parseInt(core.getInput("column_id"));
 const order = core.getInput("order").split(',');
+const defaultLabel = core.getInput("default_label");
+const defaultLabelOrder = defaultLabel ? order.indexOf(defaultLabel) : order.length;
 
 const GitHub = Octokit.plugin(paginateRest);
 const client = new GitHub({
@@ -68,9 +70,9 @@ function sortCards(cards) {
       if (index >= 0) {
         return index;
       }
-      return order.length;
+      return defaultLabelOrder;
     } else {
-      return order.length;
+      return defaultLabelOrder;
     }
   });
 }

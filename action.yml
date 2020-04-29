@@ -13,6 +13,10 @@ inputs:
     description: |
       The right order of labels separated with commas (for example, `priority:critical,priority:high,priority:low`)
     required: true
+  default_label:
+    description: |
+      Default label to consider for issues without labels. This is optional.
+    required: false
 runs:
   using: 'node12'
   main: 'dist/index.js'

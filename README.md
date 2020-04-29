@@ -18,6 +18,7 @@ jobs:
           token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}  # you need a GitHub token with enough permissions
           column_id: 42
           order: priority:critical,priority:high,priority:normal,priority:low
+          default_label: priority:normal
 ```
 
 ## Develop
@@ -26,7 +27,7 @@ After checking out a copy of the repository locally, you run `yarn` or `npm inst
 
 To run the script, you will need to pass environment variables that correspond to the inputs of the action:
 ```bash
-INPUT_COLUMN_ID=42 INPUT_TOKEN=xxx INPUT_ORDER="priority:critical,priority:high,priority:low" node index.js
+INPUT_COLUMN_ID=42 INPUT_TOKEN=xxx INPUT_ORDER="priority:critical,priority:high,priority:normal,priority:low" INPUT_DEFAULT_LABEL="priority:normal" node index.js
 ```
 
 That's it 🚀
