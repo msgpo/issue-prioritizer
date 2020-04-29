@@ -32,12 +32,14 @@ function getCards() {
 }
 
 function moveCard(cards, index) {
-  core.debug(`Moving card with id ${cards[index].id}`);
+  // using after:id will also avoid moving cards if they are already in the right position
+  const position = index === 0 ? "top" : `after:${cards[index - 1].id}`
+  core.debug(`Moving card with id ${cards[index].id} to position: ${position}`);
   performRequest({
     path: `POST /projects/columns/cards/{card_id}/moves`,
     inputs: {
       card_id: cards[index].id,
-      position: 'bottom',
+      position,
       column_id,
     }
   }).then(_ => {
