@@ -78,7 +78,7 @@ function sortCards(cards) {
 function rearrangeCards() {
   getCards().then(result => {
     const promises = result.filter(card => {
-      // TODO: what happens to these cards?
+      // these cards will be kept at the top of the column, these are notes, not issues
       return card['content_url'] != null;
     }).map(card => {
       core.debug(`GET ${card['content_url'].replace('https://api.github.com', '')}`);
