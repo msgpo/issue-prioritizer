@@ -25,7 +25,6 @@ function getCards() {
     path: "GET /projects/columns/{column_id}/cards",
     inputs: {
       column_id,
-      archived_state: 'all',
       per_page: 100,
       page: 1,
     }
