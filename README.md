@@ -21,7 +21,7 @@ jobs:
           default_label: priority:normal
 ```
 
-It will reorder cards in your project. Notes (that are not converted to issues) will be put at the top of the column.
+It will reorder cards in your project, including notes that are not yet converted to issues. If some issues are unlabelled, you can define a `default_label` to consider for these: it will make the action behave as if the issue was correctly labelled, but doesn't assign the label. It works for notes too.
 
 
 ## Develop

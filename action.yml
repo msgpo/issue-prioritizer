@@ -11,7 +11,7 @@ inputs:
     required: true
   order:
     description: |
-      The right order of labels separated with commas (for example, `priority:critical,priority:high,priority:low`)
+      The right order of labels separated with commas (for example, `priority:critical,priority:high,priority:normal,priority:low`)
     required: true
   default_label:
     description: |
