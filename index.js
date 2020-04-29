@@ -81,10 +81,13 @@ function sortCards(cards) {
 
 function rearrangeCards() {
   getCards().then(result => {
-    const promises = result.filter(card => {
-      // these cards will be kept at the top of the column, these are notes, not issues
-      return card['content_url'] != null;
-    }).map(card => {
+    const promises = result.map(card => {
+      // these cards are notes, not issues
+      if (!card.content_url) {
+        card.labels = [];
+        return Promise.resolve(card);
+      }
+
       core.debug(`GET ${card['content_url'].replace('https://api.github.com', '')}`);
       return performRequest({
         path: `GET ${card['content_url'].replace('https://api.github.com', '')}`,
