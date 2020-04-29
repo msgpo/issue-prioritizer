@@ -59,7 +59,8 @@ function sortCardLabels(labels) {
     if (index >= 0) {
       return index;
     }
-    return labels.length;
+    // this will get any label that is not in the `order` at the end
+    return order.length;
   });
 }
 
