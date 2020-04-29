@@ -1,27 +1,25 @@
 const _ = require('lodash');
 const core = require('@actions/core');
-const {request} = require("@octokit/request");
+const { Octokit } = require('@octokit/rest');
+const { paginateRest } = require("@octokit/plugin-paginate-rest");
 
 const token = core.getInput("token");
 const column_id = parseInt(core.getInput("column_id"));
 const order = core.getInput("order").split(',');
 
-async function performRequest({token, path, inputs}) {
-  const requestWithAuth = request.defaults({
-    headers: {
-      authorization: `Bearer ${token}`
-    },
-    mediaType: {
-      previews: ["inertia"]
-    }
-  });
-  return await requestWithAuth(path, inputs);
+const GitHub = Octokit.plugin(paginateRest);
+const client = new GitHub({
+  auth: token,
+  previews: ["inertia"]
+});
+
+async function performRequest({path, inputs}, paginate = false) {
+  return await (paginate ? client.paginate(path, inputs) : client.request(path, inputs));
 }
 
 function getCards() {
-  console.log("GET /projects/columns/{column_id}/cards");
+  core.info(`Getting project cards for column ${column_id}...`);
   return performRequest({
-    token,
     path: "GET /projects/columns/{column_id}/cards",
     inputs: {
       column_id,
@@ -29,13 +27,12 @@ function getCards() {
       per_page: 100,
       page: 1,
     }
-  });
+  }, true);
 }
 
 function moveCard(cards, index) {
-  console.log(`POST /projects/columns/cards/{card_id}/moves`);
+  core.debug(`Moving card with id ${cards[index].id}`);
   performRequest({
-    token,
     path: `POST /projects/columns/cards/{card_id}/moves`,
     inputs: {
       card_id: cards[index].id,
@@ -46,10 +43,10 @@ function moveCard(cards, index) {
     if (index + 1 < cards.length) {
       moveCard(cards, index + 1);
     } else {
-      console.log("Done!");
+      core.info("Done.");
     }
   }).catch(error => {
-    core.setFailed(error.message);
+    core.setFailed(`Couldn't move card with id ${cards[index].id}: ${error.message}`);
   });
 }
 
@@ -80,30 +77,26 @@ function sortCards(cards) {
 
 function rearrangeCards() {
   getCards().then(result => {
-    if (result && result['data']) {
-      const promises = result['data'].filter(card => {
-        return card['content_url'] != null;
-      }).map(card => {
-        console.log(`GET ${card['content_url'].replace('https://api.github.com', '')}`);
-        return performRequest({
-          token,
-          path: `GET ${card['content_url'].replace('https://api.github.com', '')}`,
-        }).then(issue => {
-          card.labels = issue['data']['labels'].map(label => label.name);
-          return card;
-        }).catch(error => {
-          console.log(error);
-        });
-      });
-
-      Promise.all(promises).then(cards => {
-        moveCard(sortCards(cards), 0);
+    const promises = result.filter(card => {
+      // TODO: what happens to these cards?
+      return card['content_url'] != null;
+    }).map(card => {
+      core.debug(`GET ${card['content_url'].replace('https://api.github.com', '')}`);
+      return performRequest({
+        path: `GET ${card['content_url'].replace('https://api.github.com', '')}`,
+      }).then(issue => {
+        card.labels = issue['data']['labels'].map(label => label.name);
+        return card;
       }).catch(error => {
-        core.setFailed(error.message);
+        core.info(error);
       });
-    }
+    });
+
+    return Promise.all(promises).then(cards => {
+      core.info(`Sorting ${cards.length} cards...`);
+      moveCard(sortCards(cards), 0);
+    });
   }).catch(error => {
-    console.log(error);
     core.setFailed(error.message);
   });
 }
