@@ -21,6 +21,9 @@ jobs:
           default_label: priority:normal
 ```
 
+It will reorder cards in your project. Notes (that are not converted to issues) will be put at the top of the column.
+
+
 ## Develop
 
 After checking out a copy of the repository locally, you run `yarn` or `npm install .` to install dependencies.
