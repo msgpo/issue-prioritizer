@@ -34,3 +34,13 @@ INPUT_COLUMN_ID=42 INPUT_TOKEN=xxx INPUT_ORDER="priority:critical,priority:high,
 ```
 
 That's it 🚀
+
+## Build
+
+Use `zeit/ncc` to build `issue-prioritizer`
+
+1. Install `zeit/ncc` by running this command in your terminal: `npm i -g @zeit/ncc`
+2. Compile your `index.js` file using the following command: `ncc build index.js`
+
+As a result, a file `dist/index.js` with your code and the compiled modules will be generated.
+You should always commit this file because GitHub uses it to run the action.
