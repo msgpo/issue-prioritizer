@@ -23,6 +23,8 @@ jobs:
 
 It will reorder cards in your project, including notes that are not yet converted to issues. If some issues are unlabelled, you can define a `default_label` to consider for these: it will make the action behave as if the issue was correctly labelled, but doesn't assign the label. It works for notes too.
 
+You will need to grant the `admin:org` (to list and move project cards) and `repo` (to access to issues labels) scopes to your GitHub token.
+
 
 ## Develop
 
